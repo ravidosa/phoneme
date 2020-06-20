@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<%- include ../partials/head %>
+    <title>About | The Irvington Voice</title>
+    <script src="/__/firebase/7.15.2/firebase-app.js"></script>
+    <script src="/__/firebase/7.15.2/firebase-auth.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+	<header>
+		<%- include ../partials/header %>
+	</header>
+
+	<main>
+        <% if (locals.userInfo) { %>
+            <h1><%= "Welcome, " + userInfo.name.split(" ")[0] + "." %></h1>
+        <% } %>
+        <a href="dashboard/editor"><p>New Article</p></a>
+        <% if (userInfo.position.includes("Editor")) { %>
+            <a href="dashboard/customize"><p>Customize Site</p></a>
+        <% } %>
+        <% if (review.length > 0) { %>
+            <div>
+                <h3>To Review</h3>
+                <button onclick="approveAll(); return false;">Approve All</button>
+                <table id="draft">
+                  <tbody id="draft" style="display: inline-block">
+                    <% review.forEach(function(article) {%>
+                        <tr id="draft">
+                            <td className="staffheadline">
+                              <a href="<%= '/dashboard/editor/draft/' + article.id%>"><%= article.headline %></a>
+                            </td>
+                        </tr>
+                    <%});%>
+                  </tbody>
+                </table>
+              </div>
+        <% } %>
+        <% if (drafts.length > 0) { %>
+            <div>
+                <h3>Saved Drafts</h3>
+                <table id="draft">
+                  <tbody id="draft" style="display: inline-block">
+                    <% drafts.forEach(function(article) {%>
+                        <tr id="draft">
+                            <td className="staffheadline">
+                              <a href="<%= '/dashboard/editor/draft/' + article.id%>"><%= article.headline %></a>
+                            </td>
+                        </tr>
+                    <%});%>
+                  </tbody>
+                </table>
+              </div>
+        <% } %>
+        <% if (submitted.length > 0) { %>
+            <div>
+                <h3>Submitted Drafts</h3>
+                <table id="draft">
+                  <tbody id="draft" style="display: inline-block">
+                    <% submitted.forEach(function(article) {%>
+                        <tr id="draft">
+                            <td className="staffheadline">
+                                <%= article.headline %>
+                            </td>
+                        </tr>
+                    <%});%>
+                  </tbody>
+                </table>
+              </div>
+        <% } %>
+        <% if (approved.length > 0) { %>
+            <div>
+                <h3>Approved Articles</h3>
+                <table id="draft">
+                  <tbody id="draft" style="display: inline-block">
+                    <% approved.forEach(function(article) {%>
+                        <tr id="draft">
+                            <td className="staffheadline">
+                              <a href="<%= '/dashboard/editor/article/' + article.id%>"><%= article.headline %></a>
+                            </td>
+                        </tr>
+                    <%});%>
+                  </tbody>
+                </table>
+              </div>
+        <% } %>
+        <button id="signout" onclick="signOut();return false;">Sign out</button>
+	</main>
+    <script src="/__/firebase/init.js"></script>
+    <script>
+        const signOut = () => {
+            firebase.auth().signOut().then(() => {
+                const options = {
+                    url: '/unauth',
+                    method: 'POST',
+                };
+                axios(options).then((res) => {
+                    window.location.replace("/login")
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+            })
+        }
+        const approveAll = () => {
+          if (firebase.auth().currentUser) {
+                const options = {
+                    url: '/approve-all',
+                    method: 'POST'
+                };
+                axios(options).then((res) => {
+                    alert("Articles approved!")
+                })
+                .catch((err) => {
+                    alert(err)
+                })
+            }
+        }
+    </script>
+</body>
+</html>

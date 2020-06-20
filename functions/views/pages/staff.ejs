@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<%- include ../partials/head %>
+	<title>About | The Irvington Voice</title>
+</head>
+<body>
+
+	<header>
+		<%- include ../partials/header %>
+	</header>
+
+	<main>
+        <h1>Staff</h1>
+        <div class="grid">
+            <% stafflist.forEach(function(staff) {%>
+                <div class="<%= 'staff y' + staff.years.join(' y')%>" style="<%= 'background-image: url(' + staff.image + '); background-size: cover; background-position: center' %>">
+                    <div>
+                        <a href="<%= '/staff/' + staff.id%>">
+                        <div class="staffname"><%= staff.name + ", " + staff.position %></div>
+                        </a>
+                    </div>
+                </div>
+            <%});%>
+        </div>
+	</main>
+	
+</body>
+</html>

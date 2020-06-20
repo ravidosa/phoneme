@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<%- include ../partials/head %>
+	<title>About | The Irvington Voice</title>
+</head>
+<body>
+
+	<header>
+		<%- include ../partials/header %>
+	</header>
+
+	<main>
+        <div class="blurbs left">
+            <h1><%= category.replace(/-/g, " ").replace(/(?:^|\s|["'([{])+\S/g, match => match.toUpperCase()) %></h1>
+            <% articles.forEach(function(article) {%>
+                <div class="blurb">
+                    <a href="<%= '/article/' + article.id%>"><h1 class="headline"><%= article.headline %></h1></a>
+                    <div>
+                      <p>
+                        <span class="byline"><%= "By " + article.byline.join(", ") %></span>
+                        <br />
+                        <span class="pubdate"><%= new Date(article.timestamp.seconds * 1000 + 18000000).toDateString().substring(4) %></span>
+                        <br />
+                        <br />
+                        <% if (article.content) { %>
+                            <span class="content"><%- article.content.replace(/<[^>]+>/g, '').substring(0, 290) + "..." %></span>
+                        <% } %>
+                      </p>
+                    </div>
+                  </div>
+            <%});%>
+            <div class="buttons">
+                <% if (page > 1) { %>
+                    <a href="<%= '/category/' + category + '?page=' + (parseInt(page) - 1)%>"><button id="paginate">previous page</button></a>
+                <% } %>
+                <a href="<%= '/category/' + category + '?page=' + (parseInt(page) + 1)%>"><button id="paginate">next page</button></a>
+            </div>
+        </div>
+        <%- include ../partials/sidebar %>
+	</main>
+	
+</body>
+</html>

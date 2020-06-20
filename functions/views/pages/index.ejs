@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<%- include ../partials/head %>
+</head>
+<body>
+
+	<header>
+		<%- include ../partials/header %>
+	</header>
+
+	<main>
+		<div id="gridwrap">
+			<div id="grid-display">
+				<% for (var i = 0; i < articles.length;  i++) { %>
+					<% if (articles[i].permalinkphotobox) { %>
+						<div class="grid-item" style="<%= 'background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(' + articles[i].permalinkphotobox.src + '); grid-area: ' + gridloc[i] %>">
+							<div style='text-align: center'>
+							<a href="<%= '/article/' + articles[i].id%>" style="color: white; text-decoration-color: white"><span className="headline" style="font-size: 2vw"><%= articles[i].headline %></span></a>
+							<br />
+							<span className="byline" style="color: white; font-size: 70%"><%= "By " + articles[i].byline.map(function (el) { return el.name; }).join(", ") %></span>
+							</div>
+						</div>
+					<% } %>
+					<% if (articles[i].storyshadow) { %>
+						<div class="grid-item" style="<%= 'background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(' + articles[i].storyshadow.src + '); grid-area: ' + gridloc[i] %>">
+							<div style='text-align: center'>
+							<a href="<%= '/article/' + articles[i].id%>" style="color: white; text-decoration-color: white"><span className="headline" style="font-size: 2vw"><%= articles[i].headline %></span></a>
+							<br />
+							<span className="byline" style="color: white; font-size: 70%"><%= "By " + articles[i].byline.map(function (el) { return el.name; }).join(", ") %></span>
+							</div>
+						</div>
+					<% } %>
+					<% if (articles[i].permalinkphotobox) { %>
+						<div class="grid-item" style="<%= 'background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(`https://moundspet.com/wp-content/uploads/2017/03/Placeholder-1.png`); grid-area: ' + gridloc[i] %>">
+							<div style='text-align: center'>
+							<a href="<%= '/article/' + articles[i].id%>" style="color: white; text-decoration-color: white"><span className="headline" style="font-size: 2vw"><%= articles[i].headline %></span></a>
+							<br />
+							<span className="byline" style="color: white; font-size: 70%"><%= "By " + articles[i].byline.map(function (el) { return el.name; }).join(", ") %></span>
+							</div>
+						</div>
+					<% } %>
+				<% } %>
+			</div>
+			<%- include ../partials/footer %>
+		</div>
+	</main>
+
+</body>
+</html>

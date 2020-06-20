@@ -1,0 +1,21 @@
+<div id="sidebar" class="right">
+    <div id="sidebarwrap">
+      <div id="sidebarhead">
+        Recent Posts
+      </div>
+      <ul id="sidebarblurbs" class="blurbs">
+        <% sidebar.forEach(function(article) {%>
+            <div class="blurb">
+                <a href="<%= '/article/' + article.id%>"><p class="headline"><%= article.headline %></p></a>
+                <div>
+                  <p>
+                    <span class="byline"><%= "By " + article.byline.join(", ") %></span>
+                    <br />
+                    <span class="pubdate"><%= new Date(article.timestamp.seconds * 1000 + 18000000).toDateString().substring(4) %></span>
+                  </p>
+                </div>
+              </div>
+        <%});%>
+      </ul>
+    </div>
+  </div>

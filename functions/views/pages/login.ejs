@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<%- include ../partials/head %>
+    <title>About | The Irvington Voice</title>
+    <script src="/__/firebase/7.15.2/firebase-app.js"></script>
+    <script src="/__/firebase/7.15.2/firebase-auth.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+	<header>
+		<%- include ../partials/header %>
+	</header>
+
+	<main>
+		<h1>Sign In</h1>
+        <p>This page is for Voice members only. If this does not apply to you, please navigate back to the main page.</p>
+        <div>
+            <% if (locals.message) { %>
+                <h1><%= message %></h1>
+            <% } %>
+            <form>
+            <label htmlFor="userEmail">
+                Email:
+            </label>
+            <input
+                type="email"
+                name="email"
+                placeholder="E.g: irvingtonvoice@gmail.com"
+                id="email"
+            />
+            <label htmlFor="userPassword">
+                Password:
+            </label>
+            <input
+                type="password"
+                name="password"
+                placeholder="Your Password"
+                id="password"
+            />
+            <input type="submit" value="Sign in" onclick="signIn();return false;">
+            </input>
+            </form>
+            <p>
+            <a href="/reset">
+                Forgot Password?
+            </a>
+            </p>
+        </div>
+	</main>
+    <script src="/__/firebase/init.js"></script>
+    <script>
+        const signIn = () => {
+            firebase.auth()
+            .signInWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value)
+            .then(() => {
+                if (firebase.auth().currentUser) {
+                    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+                    .then((idToken) => {
+                        const options = {
+                            url: '/auth',
+                            method: 'POST',
+                            headers: {
+                                'AuthToken': idToken
+                            },
+                        };
+                        axios(options).then((res) => {
+                            window.location.replace("/dashboard")
+                        })
+                        .catch((err) => {
+                            alert(err)
+                        })
+                    })
+            }
+            }).catch((err) => {
+                alert(err)
+            })
+        }
+    </script>
+</body>
+</html>

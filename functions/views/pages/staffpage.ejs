@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<%- include ../partials/head %>
+	<title>About | The Irvington Voice</title>
+</head>
+<body>
+
+	<header>
+		<%- include ../partials/header %>
+	</header>
+
+	<main>
+        <div id="staff">
+            <div class="staff left">
+              <img id="header" src="<%= user.image %>" alt="<%= user.name %>"></img>
+              <p>
+                <span id="bio"><%= user.bio %></span>
+              </p>
+            </div>
+            <div class="staff right">
+              <strong><h1 id="staffname"><%= user.name + ", " + user.position %></h1></strong>
+              <table class="blurbs">
+                <tbody>
+                    <% articles.forEach(function(article) {%>
+                        <tr id="blurb">
+                            <td class="pubdate"><%= new Date(article.timestamp.seconds * 1000 + 18000000).toDateString().substring(4) %></td>
+                            <td class="staffheadline">
+                                <a href="<%= '/article/' + article.id%>"><%= article.headline %></a>
+                            </td>
+                        </tr>
+                    <%});%>
+                </tbody>
+              </table>
+            </div>
+          </div>
+	</main>
+	
+</body>
+</html>

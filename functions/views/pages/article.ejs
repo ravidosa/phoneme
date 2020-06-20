@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<%- include ../partials/head %>
+	<meta property="og:url"                content="<%= 'https://ihsvoice-f70bd.web.app/article/' + id %>" />
+	<meta property="og:type"               content="article" />
+	<meta property="og:title"              content="<%= headline %>" />
+	<% if (locals.permalinkphotobox) { %>
+		<meta property="og:image"          content="<%= permalinkphotobox.src %>" />
+	<% } %>	
+	<% if (locals.storyshadow) { %>
+		<meta property="og:image"          content="<%= storyshadow.src %>" />
+	<% } %>	
+</head>
+<body>
+
+	<header>
+		<%- include ../partials/header %>
+	</header>
+
+	<div id="progbar">
+		<h6><%= (locals.categories && locals.categories[0]) || "Uncategorized" %></h6>
+		<h5><%= headline %></h5>
+		<div class="progress-container">
+		  <div class="progress-bar" id="myBar"></div>
+		</div>
+	</div>
+	
+	<main>
+		<div id="article" class="<%= (locals['full-width']) ? 'full-width' : 'left classic' %>">
+			<ul class="categories">
+				<% categories.forEach(function(category) {%>
+					<a href="<%= '/category/' + category.replace(/ /g, '-')%>"><li class="categories"><%=category%></li></a>
+				<%});%>
+			</ul>
+			<% if (locals.headline) { %>
+				<h1 class="headline"><%= headline %></h1>
+			<% } %>
+			<div class="clear"></div>
+			<% if (locals.permalinkphotobox) { %>
+				<div class="permalinkphotobox">
+					<div class="photowrap">
+						<a class="modal-photo photooverlay" href="<%= permalinkphotobox.src %>">
+						<img src="<%= permalinkphotobox.src %>" alt="<%= permalinkphotobox.caption %>" class="catboxphoto"></img>
+						</a>
+						<div class="modal-photo photo-enlarge elusive el-icon-zoom-in"></div>
+					</div>
+					<div class="clear"></div>
+					<div class="captionbox">
+						<p class="photocredit"><%= permalinkphotobox.credit %></p>
+						<p class="photocaption"><%= permalinkphotobox.caption %></p>
+					</div>
+				</div>
+			<% } %>
+			<% if (locals.storyshadow) { %>
+				<div class="storyshadow">
+					<div class="photowrap">
+						<a class="modal-photo photooverlay" href="<%= storyshadow.src %>">
+						<img src="<%= storyshadow.src %>" alt="<%= storyshadow.caption %>" class="catboxphoto"></img>
+						</a>
+						<div class="modal-photo photo-enlarge elusive el-icon-zoom-in"></div>
+					</div>
+					<div class="clear"></div>
+					<div class="captionbox">
+						<p class="photocredit"><%= storyshadow.credit %></p>
+						<p class="photocaption"><%= storyshadow.caption %></p>
+					</div>
+				</div>
+			<% } %>
+			<div class="details">
+				<p>
+					<span class="byline"><%= "By " + byline.map(function (el) { return el.name; }).join(", ") %></span>
+					<br />
+					<span class="pubdate"><%= new Date(timestamp.seconds * 1000 + 18000000).toDateString().substring(4) %></span>
+				</p>
+			</div>
+			<span class="content">
+				<% if (locals.content) { %>
+					<%- content %>
+				<% } %>
+			</span>
+			<div class="clear"></div>
+			<ul class="tags">
+				<% tags.forEach(function(tag) {%>
+					<a href="<%= '/tag/' + tag.replace(/ /g, '-')%>"><li class="tags"><%=tag%></li></a>
+				<%});%>
+			</ul>
+			<div id="aboutwriter">
+				<% if (byline.length > 1) { %>
+					<h2>
+						About the Writers
+					</h2>
+				<% } %>
+				<% if (byline.length === 1) { %>
+					<h2>
+						About the Writer
+					</h2>
+				<% } %>
+				<% byline.forEach(function(writer) {%>
+					<div class="writer">
+						<% if (writer && writer.name !== "" && typeof writer !== "string") { %>
+							<div>
+								<img id="profpic" src="<%= writer.image%>" alt="<%= writer.name%>"></img>
+								<div>
+								  <a href="<%= '/staff/' + writer.id%>"><p><strong><span class="staffaboutname"><%= writer.name + ", " + writer.position %></span></strong></p></a>
+								  <p>
+									<span id="bio"><%= writer.bio %></span>
+								  </p>
+								</div>
+							  </div>
+						<% } %>
+					</div>
+				<%});%>
+			</div>
+		</div>
+		<% if (!locals['full-width']) { %>
+			<%- include ../partials/sidebar %>
+		<% } %>	
+	</main>
+	<script>
+		window.onscroll = () => {
+			var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+			var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+			var scrolled = (winScroll / height) * 100;
+			document.getElementById("myBar").style.width = scrolled + "%";
+			if (window.pageYOffset > 200) {
+				document.getElementById("progbar").style.display = "block";
+			}
+			else {
+				document.getElementById("progbar").style.display = "none";
+			}
+		} 
+	</script>
+	
+</body>
+</html>
