@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "ejs": "^1.0.0",
+    "ejs": ">=2.5.5",
     "express": "^4.6.1",
     "express-ejs-layouts": "^1.1.0",
     "firebase-admin": "^8.6.0",
