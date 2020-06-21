@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<%- include ../partials/head %>
-	<title>About | The Irvington Voice</title>
+  <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/static/css/article.css">
+	<title>Tag | The Irvington Voice</title>
 </head>
 <body>
 
 	<header>
-		<%- include ../partials/header %>
+		<%- include('../partials/header') %>
 	</header>
 
 	<main>
@@ -37,7 +38,7 @@
                 <a href="<%= '/tag/' + tag + '?page=' + (parseInt(page) + 1)%>"><button id="paginate">next page</button></a>
             </div>
         </div>
-        <%- include ../partials/sidebar %>
+        <%- include('../partials/sidebar') %>
 	</main>
 	
 </body>

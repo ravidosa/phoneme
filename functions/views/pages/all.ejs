@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('../partials/head') %>
+    <%- include('../partials/head') %>
   <link rel="stylesheet" href="/static/css/article.css">
-	<title>Category | The Irvington Voice</title>
+	<title>All articles | The Irvington Voice</title>
 </head>
 <body>
 
@@ -13,7 +13,7 @@
 
 	<main>
         <div class="blurbs left">
-            <h1><%= category.replace(/-/g, " ").replace(/(?:^|\s|["'([{])+\S/g, match => match.toUpperCase()) %></h1>
+            <h1>All</h1>
             <% articles.forEach(function(article) {%>
                 <div class="blurb">
                     <a href="<%= '/article/' + article.id%>"><h1 class="headline"><%= article.headline %></h1></a>
@@ -33,12 +33,11 @@
             <%});%>
             <div class="buttons">
                 <% if (page > 1) { %>
-                    <a href="<%= '/category/' + category + '?page=' + (parseInt(page) - 1)%>"><button id="paginate">previous page</button></a>
+                    <a href="<%= '/all' + '?page=' + (parseInt(page) - 1)%>"><button id="paginate">previous page</button></a>
                 <% } %>
-                <a href="<%= '/category/' + category + '?page=' + (parseInt(page) + 1)%>"><button id="paginate">next page</button></a>
+                <a href="<%= '/all' + '?page=' + (parseInt(page) + 1)%>"><button id="paginate">next page</button></a>
             </div>
         </div>
-        <%- include('../partials/sidebar') %>
 	</main>
 	
 </body>

@@ -54,20 +54,21 @@ const getArticleData = async (id) =>  {
         if (writerdata) {
             data.byline[i] = writerdata;
         }
+        else {
+            data.byline[i] = {name: data.byline[i]};
+        }
     }
     if (data.permalinkphotobox) {
         data.permalinkphotobox.src = await storageRef.file('article-photos/' + data.permalinkphotobox.src).getSignedUrl({
             action: "read",
             expires: '03-17-2025' // this is an arbitrary date
         });
-        console.log(data.permalinkphotobox.src)
     }
     if (data.storyshadow) {
         data.storyshadow.src = await storageRef.file('article-photos/' + data.storyshadow.src).getSignedUrl({
             action: "read",
             expires: '03-17-2025' // this is an arbitrary date
         });
-        console.log(data.storyshadow.src)
     }
     data.sidebar = await getSidebarData();
     return data;
@@ -130,6 +131,25 @@ app.get('/tag/:tag',  async (req, res) => {
     res.render('pages/tag', await getTagArticles(req.params.tag, req.query.page));
 })
 
+const getAllArticles = async (page) =>  {
+    const data = {articles: []}
+    await db.collection(`articles`).orderBy("timestamp", "desc").limit(5).offset(5 * (page - 1)).get().then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+            data.articles.push(documentSnapshot.data());
+        });
+        return
+    });
+    data.page = page;
+    return data;
+}
+
+app.get('/all',  async (req, res) => {
+    if (!req.query.page) {
+        req.query.page = 1;
+    }
+    res.render('pages/all', await getAllArticles(req.query.page));
+})
+
 const getStaffList = async () =>  {
     const data = {stafflist: []};
     await db.collection(`users`).get().then(querySnapshot => {
@@ -159,7 +179,6 @@ const getStaff = async (id) =>  {
         querySnapshot.forEach(documentSnapshot => {
             articles.push(documentSnapshot.data());
         });
-        console.log(articles)
         return articles;
     }).catch();
     return data;
@@ -272,7 +291,6 @@ app.post('/unauth', (req, res) => {
 });
 
 app.post('/upload-draft', checkAuth, async (req, res) => {
-    console.log(req.body);
     db.collection("drafts").doc(req.body.id).set(req.body, { merge: true })
     .catch((error) => {
         res.status(500).send("Error saving article. Please retry.");
@@ -281,7 +299,6 @@ app.post('/upload-draft', checkAuth, async (req, res) => {
 });
 
 app.post('/approve-draft', checkAuth, async (req, res) => {
-    console.log(req.body);
     req.body.timestamp = new Date();
     db.collection("articles").doc(req.body.id).set(req.body, { merge: true })
     .catch((error) => {
@@ -297,8 +314,8 @@ app.post('/approve-all', checkAuth, async (req, res) => {
         data = doc.data();
         data.timestamp = new Date()
         delete data.submitted
-        await db.collection("articles").doc(doc.data().id).set(data).then(() => console.log(doc.data().id + " uploaded"));
-        await db.collection("drafts").doc(doc.data().id).delete().then(() => console.log(doc.data().id + " deleted"))
+        await db.collection("articles").doc(doc.data().id).set(data);
+        await db.collection("drafts").doc(doc.data().id).delete();
       });
     });
     res.status(200).send('Articles uploaded.')
