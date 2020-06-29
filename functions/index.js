@@ -55,7 +55,7 @@ const getArticleData = async (id) =>  {
             data.byline[i] = writerdata;
         }
         else {
-            data.byline[i] = {name: data.byline[i]};
+            data.byline[i] = {name: data.byline[i], image: "https://www.sackettwaconia.com/default-profile/", bio: "", id: "", position: ""};
         }
     }
     if (data.permalinkphotobox) {
